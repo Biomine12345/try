@@ -1,0 +1,14 @@
+*.iml
+*.mo
+*.css
+*.css.map
+*.min.js
+*.min.js.map
+.idea
+target
+biomine-view/compilation_cache
+biomine-view/composer
+biomine-view/www/libraries
+vagrant/biomine-view
+vagrant/.vagrant
+vagrant/wildfly*.zip
