@@ -1,0 +1,131 @@
+{% extends "/global_page_template" ~ (IS_DEVEL_SERVER ? "_dev") ~ ".twig" %}
+
+{% block page_title %}
+  {% if constant('HTML_LANG') is sameas('zh-Hans') %}
+    About Us
+  {% elseif constant('HTML_LANG') is sameas('zh-Hant') %}
+    About Us
+  {% else %}
+    About Us
+  {% endif %}
+{% endblock %}
+
+{% block page_desc %}
+  {% if constant('HTML_LANG') is sameas('zh-Hans') %}
+  {% elseif constant('HTML_LANG') is sameas('zh-Hant') %}
+  {% else %}
+  {% endif %}
+{% endblock %}
+
+{% block page_plugin_styles %}
+  {{ parent() }}
+{% endblock %}
+
+{% block page_styles %}
+  {{ parent() }}
+  <link href="/libraries/porto/HTML/css/skins/skin-restaurant.css" rel="stylesheet">
+  <link href="/libraries/porto/HTML/css/demos/demo-restaurant.css" rel="stylesheet">
+  <link href="/assets/css/pages/about/about.css" rel="stylesheet">
+{% endblock %}
+
+{% block page_body_class %}page-about{% endblock %}
+
+{% block page_content %}
+  {{ parent() }}
+  <div role="main" class="main">
+    {#<section class="parallax section section-text-light section-parallax section-center mt-none mb-xl"#}
+             {#data-plugin-parallax data-plugin-options='{"speed": 1.5}'#}
+             {#data-image-src="http://preview.oklerthemes.com/porto/5.2.0/img/demos/restaurant/parallax-restaurant-2.jpg">#}
+      {#<div class="container">#}
+        {#<div class="row">#}
+          {#<div class="col-md-12 center">#}
+            {#<h1 class="mt-xlg pb-md pt-md font-color-light"><strong>Biomine</strong> Lab Corp.</h1>#}
+          {#</div>#}
+        {#</div>#}
+      {#</div>#}
+    {#</section>#}
+
+    <div class="header-image-container center">
+      <img src="/img/researchers.jpg" />
+      <h1 class="header-title"><strong>Biomine</strong> Lab Corp.</h1>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 pt-xlg">
+          <h2>About Us</h2>
+
+          <h4 class="mt-lg mb-sm">Welcome to the Biomine Laboratory Family</h4>
+          <p>
+            Biomine Lab Corp. was founded to deliver the best healthy and effective supplements to people.
+            Our talented team of researchers, nutritionists, doctors and chemists have worked together to
+            develop and produce high-quality nutritional supplements for every type of customer. Whether
+            you hope to boost your metabolism, protect your vital organs or renew your love life, Biomine
+            will be of your help.
+          </p>
+
+          <h4 class="mt-lg mb-sm">High Standards of Excellence</h4>
+          <p>
+            Working out of our New York laboratory, our health and wellness experts adhere to stringent
+            standards of high quality and industry ethics. Our number one priority at Biomine is your
+            health and safety, so we manufacture only the finest ingredients from around the world into
+            our formulas. Our elite team of professionals diligently test every product from every possible
+            angle so you are ensured the best quality available by modern science.
+          </p>
+
+          <h4 class="mt-lg mb-sm">Safe Nutraceuticals from Biomine</h4>
+          <p>
+            When Biomine was founded, the goal was set to achieve an industry first in creating premier
+            nutritional products based on the many combined technologies. A dedicated team of innovators
+            in their respective fields came together with the common goal to develop alternatives to the
+            potentially dangerous, chemical laden drugs on the market. Using a balance of tried-and-true,
+            ancient herbal cures and modern innovation in the laboratory, we began producing products
+            that would not only get customers the results they so richly deserved, but also safeguard
+            them from the risky side effects of pharmaceuticals.
+          </p>
+
+          <h4 class="mt-lg mb-sm">Our Promise</h4>
+          <p>
+            We know you'll be blown away by the results you experience, so we aren't afraid to promise
+            a 30 day risk free trial of all our products. Our commitment to your satisfaction is paramount,
+            so if for any reason you aren't 100% satisfied, we will refund your purchase. No fine print,
+            no explanation needed; we simply want you to be thrilled with your new, rejuvenated body.
+          </p>
+
+        </div>
+      </div>
+    </div>
+
+    <section class="section section-default mb-none">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 center">
+
+            <h4 class="mt-lg mb-sm">Get in <strong>Touch</strong></h4>
+            <p>
+              Join the Biomine family today, and experience the change you've been waiting for!<br>
+              Call us today to ask questions or start your order.
+            </p>
+
+            <hr class="custom-divider">
+
+            <h5 class="mb-xs mt-xl">Call Us</h5>
+            <p><i class="fa fa-phone"></i> {{ constant('PHONE_NUMBER') }}</p>
+
+            <h5 class="mb-xs mt-xl">Visit Us</h5>
+            <p><i class="fa fa-map-marker"></i> {{ constant('ADDRESS_LINE1') ~ ', ' ~ constant('ADDRESS_LINE2') }}</p>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock %}
+
+{% block page_plugins %}
+  {{ parent() }}
+{% endblock %}
+
+{% block page_scripts %}
+  {{ parent() }}
+{% endblock %}
