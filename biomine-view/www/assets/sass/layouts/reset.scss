@@ -1,0 +1,70 @@
+/**
+ * General reset. Note that, we actually depend on Bootstrap's normalize.css to
+ * do reset. The ones here are just modifications or additions.
+ */
+
+a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, body, center, canvas,
+caption, cite, code, command, datalist, dd, del, details, dfn, dl, div, dt, em, embed, fieldset,
+figcaption, figure, font, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe,
+img, ins, kbd, keygen, label, legend, li, meter, nav, object, ol, output, p, pre, progress, q, s,
+samp, section, small, span, source, strike, strong, sub, sup, table, tbody, tfoot, thead, th, tr,
+td, video, tt, u, ul, var {
+  background: transparent;
+  //font-weight: inherit;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  vertical-align: baseline;
+}
+
+a {
+  text-decoration: none;
+  outline: none !important;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+img {
+  vertical-align: top;
+  max-width: 100%; // Never get wider than its containing element.
+}
+
+input, button {
+  outline: none;
+  background: transparent;
+}
+
+/**
+ * http://getbootstrap.com/getting-started/#support-ie10-width
+ * Internet Explorer 10 doesn't differentiate device width from viewport width, and thus
+ * doesn't properly apply the media queries in Bootstrap's CSS. To address this, you can
+ * optionally include the following CSS and JavaScript to work around this problem until
+ * Microsoft issues a fix.
+ */
+@-webkit-viewport {
+  width: device-width;
+}
+
+@-moz-viewport {
+  width: device-width;
+}
+
+@-ms-viewport {
+  width: device-width;
+}
+
+@-o-viewport {
+  width: device-width;
+}
+
+@viewport {
+  width: device-width;
+}
+
+.form-horizontal .form-group {
+  margin-right: 0; // Not sure why bootstrap gives a -15px left and right margin to .form-group.
+  margin-left: 0;
+}
