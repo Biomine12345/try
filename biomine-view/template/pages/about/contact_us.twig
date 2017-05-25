@@ -1,0 +1,132 @@
+{% extends "/global_page_template" ~ (IS_DEVEL_SERVER ? "_dev") ~ ".twig" %}
+
+{% block page_title %}
+  {% if constant('HTML_LANG') is sameas('zh-Hans') %}
+    Contact Us
+  {% elseif constant('HTML_LANG') is sameas('zh-Hant') %}
+    Contact Us
+  {% else %}
+    Contact Us
+  {% endif %}
+{% endblock %}
+
+{% block page_desc %}
+  {% if constant('HTML_LANG') is sameas('zh-Hans') %}
+  {% elseif constant('HTML_LANG') is sameas('zh-Hant') %}
+  {% else %}
+  {% endif %}
+{% endblock %}
+
+{% block page_plugin_styles %}
+  {{ parent() }}
+{% endblock %}
+
+{% block page_styles %}
+  {{ parent() }}
+  <link href="/libraries/porto/HTML/css/skins/skin-restaurant.css" rel="stylesheet">
+  <link href="/libraries/porto/HTML/css/demos/demo-restaurant.css" rel="stylesheet">
+{% endblock %}
+
+{% block page_body_class %}page-contact{% endblock %}
+
+{% block page_content %}
+  {{ parent() }}
+  <div role="main" class="main">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 center">
+          <h1 class="mt-xlg mb-sm pt-md">Get in <strong>Touch</strong></h1>
+          <hr class="custom-divider">
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row mt-lg">
+        <div class="col-md-4">
+          <div class="feature-box feature-box-style-2">
+            <div class="feature-box-icon">
+              <i class="icon-location-pin icons"></i>
+            </div>
+            <div class="feature-box-info">
+              <h4 class="mb-sm">Address</h4>
+              <p class="font-size-lg">
+                {{ constant('ADDRESS_LINE1') }}<br>
+                {{ constant('ADDRESS_LINE2') }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-box feature-box-style-2">
+            <div class="feature-box-icon">
+              <i class="icon-phone icons"></i>
+            </div>
+            <div class="feature-box-info">
+              <h4 class="mb-sm">Phone</h4>
+              <p class="font-size-lg">
+                {{ constant('PHONE_NUMBER') }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-box feature-box-style-2">
+            <div class="feature-box-icon">
+              <i class="icon-envelope icons"></i>
+            </div>
+            <div class="feature-box-info">
+              <h4 class="mb-sm">Email</h4>
+              <p class="font-size-lg">
+                <a href="mailto:{{ constant('EMAIL') }}" class="text-decoration-none">{{ constant('EMAIL') }}</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="solid">
+
+      <div class="row pt-lg mb-lg pb-xl">
+        <div class="col-md-12">
+          <!-- Google Maps -->
+          <div id="map" class="gmaps m-none mb-xl"></div>
+          {#<div id="googlemaps" class="google-map m-none mb-xl"></div>#}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block page_plugins %}
+  {{ parent() }}
+  <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyCfd3XuiMon3c5pi2Gru0SoxTmV11mHVkw"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.24/gmaps.min.js"></script>
+{% endblock %}
+
+{% block page_scripts %}
+  {{ parent() }}
+  <script>
+    // initiate Google maps
+    $(document).ready(function() {
+      var map = new GMaps({
+        div: '#map',
+        lat: 40.7562013,
+        lng: -73.8289595,
+        width: '100%',
+        height: '300px'
+      });
+      var marker = map.addMarker({
+        lat: 40.7562013,
+        lng: -73.8289595,
+        title: '{{ constant('COMPANY_NAME') }}',
+        infoWindow: {
+          content: '<b>{{ constant('COMPANY_NAME') }}</b><br>' +
+          '{{ constant('ADDRESS_LINE1') }}<br>{{ constant('ADDRESS_LINE2') }}'
+        }
+      });
+      marker.infoWindow.open(map, marker);
+    });
+  </script>
+{% endblock %}
