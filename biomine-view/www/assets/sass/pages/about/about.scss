@@ -1,0 +1,13 @@
+@import '../../mixins/_mixins';
+@import '../../utils/_variables';
+
+.page-about {
+
+  .header-image-container {
+    position: relative;
+
+    .header-title {
+      @include absolute(bottom 50px left 0 right 0);
+    }
+  }
+}

@@ -1,0 +1,11 @@
+$theme-name:               	        "default";
+$theme-base-color:               	#e09b23;
+
+// Element colors
+$link-color-hover:              	$theme-base-color;
+
+$btn-primary-color:              	#fff;
+$btn-primary-bg:              	    $theme-base-color;
+$btn-primary-border:              	darken($btn-primary-bg, 5%);
+
+@import '_base';

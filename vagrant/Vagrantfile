@@ -1,0 +1,182 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure(2) do |config|
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://atlas.hashicorp.com/search.
+  config.vm.box = "ubuntu/xenial64"
+
+  # Disable automatic box update checking. If you disable this, then
+  # boxes will only be checked for updates when the user runs
+  # `vagrant box outdated`. This is not recommended.
+  config.vm.box_check_update = false
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine. In the example below,
+  # accessing "localhost:8080" will access port 80 on the guest machine.
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "forwarded_port", guest: 8080, host: 13080 # Wildfly port
+  config.vm.network "forwarded_port", guest: 9990, host: 14990 # Wildfly management port
+  config.vm.network "forwarded_port", guest: 61179, host: 61179 # Wildfly remote debugging port
+  config.vm.network "forwarded_port", guest: 80, host: 5080 # Apache port
+
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  # config.vm.network "private_network", ip: "192.168.33.10"
+
+  # Create a public network, which generally matched to bridged network.
+  # Bridged networks make the machine appear as another physical device on
+  # your network.
+  # config.vm.network "public_network"
+
+  # Share an additional folder to the guest VM. The first argument is
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+  # config.vm.synced_folder "../data", "/vagrant_data"
+  config.vm.synced_folder "../biomine-view", "/vagrant/biomine-view", mount_options: ["dmode=777,fmode=666"]
+
+  # Provider-specific configuration so you can fine-tune various
+  # backing providers for Vagrant. These expose provider-specific options.
+  # Example for VirtualBox:
+  #
+  # config.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+  #   vb.gui = true
+  #
+  #   # Customize the amount of memory on the VM:
+  #   vb.memory = "1024"
+  # end
+  #
+  # View the documentation for the provider you are using for more
+  # information on available options.
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "biomine_devel"
+    vb.memory = "2048"
+  end
+
+  # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
+  # such as FTP and Heroku are also available. See the documentation at
+  # https://docs.vagrantup.com/v2/push/atlas.html for more information.
+  # config.push.define "atlas" do |push|
+  #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
+  # end
+
+  # Enable provisioning with a shell script. Additional provisioners such as
+  # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
+  # documentation for more information about their specific syntax and use.
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo cp /etc/apt/sources.list /etc/apt/sources.list_backup
+    sudo sh -c "echo 'deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted universe multiverse' > /etc/apt/sources.list"
+    sudo sh -c "echo 'deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted universe multiverse' >> /etc/apt/sources.list"
+    sudo sh -c "echo 'deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted universe multiverse' >> /etc/apt/sources.list"
+    sudo sh -c "echo 'deb http://mirrors.aliyun.com/ubuntu/ xenial-proposed main restricted universe multiverse' >> /etc/apt/sources.list"
+    sudo sh -c "echo 'deb http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse' >> /etc/apt/sources.list"
+    sudo sh -c "echo 'deb-src http://mirrors.aliyun.com/ubuntu/ xenial main restricted universe multiverse' >> /etc/apt/sources.list"
+    sudo sh -c "echo 'deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted universe multiverse' >> /etc/apt/sources.list"
+    sudo sh -c "echo 'deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted universe multiverse' >> /etc/apt/sources.list"
+    sudo sh -c "echo 'deb-src http://mirrors.aliyun.com/ubuntu/ xenial-proposed main restricted universe multiverse' >> /etc/apt/sources.list"
+    sudo sh -c "echo 'deb-src http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse' >> /etc/apt/sources.list"
+    ZZ
+    
+    sudo add-apt-repository -y ppa:webupd8team/java
+    sudo add-apt-repository -y ppa:ondrej/php
+    sudo apt-get update
+    sudo apt-get -y upgrade
+
+    echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections 
+    echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
+    sudo apt-get -y install oracle-java8-installer
+    sudo update-java-alternatives -s java-8-oracle
+    sudo bash -c "echo JAVA_HOME=/usr/lib/jvm/java-8-oracle >> /etc/environment"
+    
+    sudo apt-get -y install apache2
+    sudo service apache2 restart
+    
+    sudo debconf-set-selections <<< 'mysql-server-5.7 mysql-server/root_password password mysql'
+    sudo debconf-set-selections <<< 'mysql-server-5.7 mysql-server/root_password_again password mysql'
+    sudo apt-get -y install mysql-server-5.7 mysql-client-5.7
+
+    sudo apt-get -y install php7.0 php7.0-mysql
+    php -v
+
+    sudo apt-get -y install php7.0-curl
+    
+	sudo apt-get -y install unzip
+    sudo unzip /vagrant/wildfly-10.0.0.Final.zip -d /opt/
+    sudo ln -s /opt/wildfly-10.0.0.Final /opt/wildfly
+    sudo chmod -R 777 /opt/wildfly-10.0.0.Final
+    
+    sudo cp /opt/wildfly/docs/contrib/scripts/init.d/wildfly.conf /etc/default/wildfly
+    sudo cp /opt/wildfly/docs/contrib/scripts/init.d/wildfly-init-debian.sh /etc/init.d/wildfly
+    sudo chmod +X /etc/init.d/wildfly
+    
+    sudo update-rc.d wildfly defaults
+    sudo update-rc.d wildfly enable
+
+    sudo mkdir -p /var/log/wildfly
+    sudo useradd --system --shell /bin/false wildfly
+    sudo chown -R wildfly:wildfly /opt/wildfly-10.0.0.Final/
+    sudo chown -R wildfly:wildfly /opt/wildfly
+    sudo chown -R wildfly:wildfly /var/log/wildfly
+    sudo /opt/wildfly/bin/add-user.sh admin biomine8879
+    sudo service wildfly restart
+    
+    sudo mkdir -p /opt/wildfly/biomine/jcseg
+    sudo chown -R wildfly:wildfly /opt/wildfly/biomine
+    
+    sudo apt-get -y install puppet
+    
+    sudo sed -i "s|DocumentRoot /var/www/html|DocumentRoot /vagrant/biomine-view/www|g" /etc/apache2/sites-available/000-default.conf
+
+    sudo usermod -aG adm vagrant
+
+    sudo echo \"US/Eastern\" | sudo tee /etc/timezone && sudo dpkg-reconfigure --frontend noninteractive tzdata
+
+    sudo apt-get -y install gettext
+    sudo locale-gen en_US
+    sudo locale-gen zh_CN
+    sudo locale-gen zh_TW
+    sudo locale-gen en_US.UTF-8
+    sudo locale-gen zh_CN.UTF-8
+    sudo locale-gen zh_TW.UTF-8
+  SHELL
+
+  config.vm.provision "puppet" do |puppet|
+    puppet.manifests_path = "manifests"
+    puppet.manifest_file = "apache_configs.pp"
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo ln -s /etc/apache2/conf-available/h5bp-server-configs-apache.conf /etc/apache2/conf-enabled/
+    sudo a2enmod setenvif headers deflate filter expires rewrite include
+  SHELL
+
+  config.vm.provision "puppet" do |puppet|
+    puppet.manifests_path = "manifests"
+    puppet.manifest_file = "wildfly_configs.pp"
+  end
+
+  config.vm.provision "puppet" do |puppet|
+    puppet.manifests_path = "manifests"
+    puppet.manifest_file = "jcseg_configs.pp"
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo service wildfly restart
+    sudo service apache2 restart
+  SHELL
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo mysql --user=root --password=mysql -e "create database biomine";
+    sudo mysql --user=root --password=mysql biomine < /vagrant/databases/biomine.sql
+  SHELL
+end
