@@ -1,0 +1,225 @@
+/**
+ * All global variables used in styling.
+ */
+
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+@mixin position($position, $args) {
+  @each $o in top right bottom left {
+    $i: index($args, $o);
+
+    @if $i and $i + 1 <= length($args) and type-of(nth($args, $i + 1)) == number  {
+      #{$o}: nth($args, $i + 1);
+    }
+  }
+
+  position: $position;
+}
+
+@mixin absolute($args) {
+  @include position(absolute, $args);
+}
+
+@mixin fixed($args) {
+  @include position(fixed, $args);
+}
+
+@mixin relative($args) {
+  @include position(relative, $args);
+}
+
+@mixin pull-left() {
+  float: left !important;
+}
+
+@mixin pull-right() {
+  float: right !important;
+}
+
+@mixin pull-center() {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+@mixin box-shadow-none() {
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
+}
+
+@mixin box-shadow($offset-x, $offset-y, $blur, $color, $inset: false) {
+  @if $inset {
+    -webkit-box-shadow:inset $offset-x $offset-y $blur $color;
+       -moz-box-shadow:inset $offset-x $offset-y $blur $color;
+            box-shadow:inset $offset-x $offset-y $blur $color;
+  } @else {
+    -webkit-box-shadow: $offset-x $offset-y $blur $color;
+       -moz-box-shadow: $offset-x $offset-y $blur $color;
+            box-shadow: $offset-x $offset-y $blur $color;
+  }
+}
+
+@mixin border-radius($px: 0px) {
+  -webkit-border-radius: $px;
+     -moz-border-radius: $px;
+      -ms-border-radius: $px;
+       -o-border-radius: $px;
+          border-radius: $px;
+}
+
+@mixin blur($px: 0px) {
+  -webkit-filter: blur($px);
+     -moz-filter: blur($px);
+      -ms-filter: blur($px);
+       -o-filter: blur($px);
+          filter: blur($px);
+}
+
+@mixin transition($args...) {
+  -webkit-transition: $args;
+     -moz-transition: $args;
+       -o-transition: $args;
+          transition: $args;
+}
+
+@mixin transition-delay($args...) {
+  -webkit-transition-delay: $args;
+     -moz-transition-delay: $args;
+       -o-transition-delay: $args;
+          transition-delay: $args;
+}
+
+@mixin transform($args) {
+  -webkit-transform: $args;
+     -moz-transform: $args;
+      -ms-transform: $args;
+       -o-transform: $args;
+          transform: $args;
+}
+
+@mixin selection($background, $color) {
+  &::-moz-selection {
+    background: $background;
+    color: $color;
+  }
+
+  &::selection {
+    background: $background;
+    color: $color;
+  }
+}
+
+@mixin placeholder-color($color) {
+  &:-moz-placeholder, &::-moz-placeholder { // Older versions of FF and FF 19+
+    color: $color;
+    opacity: 1;
+  }
+
+  &:-ms-input-placeholder { // IE 9+
+    color: $color;
+  }
+
+  &::-webkit-input-placeholder { // All webkit based browsers
+    color: $color;
+  }
+}
+
+@mixin placeholder-font-size($size) {
+  &:-moz-placeholder, &::-moz-placeholder { // Older versions of FF and FF 19+
+    font-size: $size;
+  }
+
+  &:-ms-input-placeholder { // IE 9+
+    font-size: $size;
+  }
+
+  &::-webkit-input-placeholder { // All webkit based browsers
+    font-size: $size;
+  }
+}
+
+@mixin default-box-shadow() {
+  @include box-shadow(0, 0, 10px, rgba(0, 0, 0, 0.50));
+}
+
+@mixin large-box-shadow() {
+  @include box-shadow(0, 0, 20px, rgba(0, 0, 0, 0.50));
+}
+
+@mixin small-box-shadow() {
+  @include box-shadow(0, 0, 5px, rgba(0, 0, 0, 0.25));
+}
+
+@mixin hover-darker() {
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2NkYGBIAwAAcABoLkfeMwAAAABJRU5ErkJggg==');
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+
+@mixin opacity($value) {
+  opacity: $value;
+  filter: alpha(opacity=#{$value * 100}); /* For IE8 and earlier */
+}
+
+/* Named media query breakpoints. */
+@mixin bp-lg {
+  @media only screen and (min-width: $screen-lg-min) {
+    @content;
+  }
+}
+
+@mixin bp-md {
+  @media only screen and (min-width: $screen-md-min) {
+    @content;
+  }
+}
+
+@mixin bp-md2 {
+  @media only screen and (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+    @content;
+  }
+}
+
+@mixin bp-sm {
+  @media only screen and (min-width: $screen-sm-min) {
+    @content;
+  }
+}
+
+@mixin bp-sm2 {
+  @media only screen and (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+    @content;
+  }
+}
+
+@mixin bp-xs {
+  @media only screen and (min-width: $screen-xs-min) {
+    @content;
+  }
+}
+
+@mixin bp-xs2 {
+  @media only screen and (min-width: $screen-xs-min) and (max-width: $screen-xs-max) {
+    @content;
+  }
+}
+
+// Clearfix
+// Source: http://nicolasgallagher.com/micro-clearfix-hack/
+@mixin clearfix() {
+  &:before,
+  &:after {
+    content: " "; // 1
+    display: table; // 2
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+@mixin border_red() {
+  border: 1px solid red !important;
+}
